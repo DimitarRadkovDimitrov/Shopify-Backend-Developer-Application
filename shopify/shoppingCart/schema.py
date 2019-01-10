@@ -1,13 +1,10 @@
 import graphene
 from graphene_django import DjangoObjectType
-
 from .models import ShoppingCart
-
 
 class ShoppingCartType(DjangoObjectType):
     class Meta:
         model = ShoppingCart
-
 
 class Query(graphene.ObjectType):
     shoppingCart = graphene.Field(ShoppingCartType, id=graphene.Int())
