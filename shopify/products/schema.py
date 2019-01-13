@@ -53,6 +53,9 @@ class CreateProduct(graphene.Mutation):
 
         if inventory_count is None or inventory_count < 0:
             inventory_count = 0
+
+        if price is None or price < 0:
+            price = 0.00
         
         product = Product(title=title, price=price, inventory_count=inventory_count)
         product.save()

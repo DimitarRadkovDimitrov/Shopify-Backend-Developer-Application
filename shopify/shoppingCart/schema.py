@@ -1,8 +1,11 @@
 import graphene
+from graphql import GraphQLError
 from graphene_django import DjangoObjectType
 from products.schema import ProductType
 from products.models import Product
 from .models import ShoppingCart
+
+SESSION_CART = "cartId"
 
 class ShoppingCartType(DjangoObjectType):
     class Meta:
@@ -17,10 +20,14 @@ class Query(graphene.ObjectType):
 
     def resolve_shoppingCart(self, info, **kwargs):
         """ Query for getting shopping cart by id """
+        
+        session = info.context.session
 
-        id = kwargs.get('id')
-        if id is not None:
-            return ShoppingCart.objects.get(id=id)
+        if SESSION_CART in session:
+            cartId = session.get(SESSION_CART)
+            return ShoppingCart.objects.get(id=cartId)
+        else:
+            return None
 
     def resolve_all_shopping_carts(self, info, **kwargs):
         """ Query for getting all shopping carts in db """
@@ -34,22 +41,26 @@ class AddToCart(graphene.Mutation):
     cart = graphene.Field(ShoppingCartType)
 
     class Arguments:
-        cartId = graphene.Int(required=True)
         productId = graphene.Int(required=True)
 
     def mutate(self, info, **kwargs):
-        cartId = kwargs.get("cartId")
-        productId = kwargs.get("productId")
+        session = info.context.session
 
-        if productId is not None and cartId is not None:
+        if SESSION_CART in session:
+            cartId = session.get(SESSION_CART)
             cart = ShoppingCart.objects.get(id=cartId)
-            toAdd = Product.objects.get(id=productId)
+            productId = kwargs.get("productId")
 
-            if toAdd is not None and toAdd.inventory_count > 0:
-                cart.items.add(toAdd)
-            
-            cart.calcTotal()
+            if productId is not None:
+                toAdd = Product.objects.get(id=productId)
+
+                if toAdd is not None and toAdd.inventory_count > 0:
+                    cart.items.add(toAdd)
+                    cart.calcTotal()
+                
             return AddToCart(cart=cart)
+        else:
+            return AddToCart(cart=None)
 
 class RemoveFromCart(graphene.Mutation):
     """ Removes a product from the shopping cart by id """
@@ -57,22 +68,26 @@ class RemoveFromCart(graphene.Mutation):
     cart = graphene.Field(ShoppingCartType)
 
     class Arguments:
-        cartId = graphene.Int(required=True)
         productId = graphene.Int(required=True)
 
     def mutate(self, info, **kwargs):
-        cartId = kwargs.get("cartId")
-        productId = kwargs.get("productId")
+        session = info.context.session
 
-        if productId is not None and cartId is not None:
+        if SESSION_CART in session:
+            cartId = session.get(SESSION_CART)
             cart = ShoppingCart.objects.get(id=cartId)
-            toRemove = Product.objects.get(id=productId)
+            productId = kwargs.get("productId")
 
-            if toRemove is not None:
-                cart.items.remove(toRemove)  
-                cart.calcTotal()
+            if productId is not None:
+                toRemove = Product.objects.get(id=productId)
 
+                if toRemove is not None:
+                    cart.items.remove(toRemove)  
+                    cart.calcTotal()
+                
             return RemoveFromCart(cart=cart)
+        else:
+            return RemoveFromCart(cart=None)
 
 class CreateCart(graphene.Mutation):
     """ Creates a shopping cart with list of product ids as an optional arg """
@@ -83,18 +98,25 @@ class CreateCart(graphene.Mutation):
         items = graphene.List(graphene.Int, required=False)
     
     def mutate(self, info, **kwargs):
-        cart = ShoppingCart(total=0)
-        cart.save()
-        itemsList = kwargs.get("items")
+        session = info.context.session
 
-        if itemsList is not None:
-            for itemId in itemsList:
-                if itemId > 0:
-                    product = Product.objects.get(id=itemId)
-                    if product.inventory_count > 0:
-                        cart.items.add(product)
-                        cart.total = cart.total + product.price
+        if SESSION_CART in session:
+            cartId = session.get(SESSION_CART)
+            cart = ShoppingCart.objects.get(id=cartId)
+        else:
+            cart = ShoppingCart(total=0)
+            cart.save()
+            session[SESSION_CART] = cart.id
 
+            itemsList = kwargs.get("items")
+            if itemsList is not None:
+                for itemId in itemsList:
+                    if itemId > 0:
+                        product = Product.objects.get(id=itemId)
+                        if product.inventory_count > 0:
+                            cart.items.add(product)
+
+                cart.calcTotal()
         return CreateCart(cart=cart)        
 
 class DeleteCart(graphene.Mutation):
@@ -123,15 +145,23 @@ class SubmitCart(graphene.Mutation):
     """ Completes the cart by reducing inventory and clearing cart of products """
 
     cart = graphene.Field(ShoppingCartType)
+    message = graphene.String()
 
     class Arguments:
-        cartId = graphene.Int(required=True)
+        pass
 
     def mutate(self, info, **kwargs):
-        id = kwargs.get("cartId")
-        if id is not None:
-            cart = ShoppingCart.objects.get(id=id)
-            if cart is not None:
+        msg = ""
+        session = info.context.session
+
+        if SESSION_CART in session:
+            cartId = session.get(SESSION_CART)
+            cart = ShoppingCart.objects.get(id=cartId)
+
+            if len(cart.items.all()) == 0:
+                msg = "No cart items to complete"
+                return SubmitCart(cart=cart, message=msg)
+            else:
                 for item in cart.items.all():
                     product = Product.objects.get(id=item.id)
                     if product.inventory_count > 0:
@@ -139,8 +169,12 @@ class SubmitCart(graphene.Mutation):
                         product.save()
                         cart.items.remove(product)
 
-                cart.calcTotal()  
-            return SubmitCart(cart=cart)
+                cart.calcTotal()
+                msg = "Shopping cart was successfully completed"
+                return SubmitCart(cart=cart, message=msg)
+        else:
+            msg = "No shopping cart to complete"
+            return SubmitCart(cart=None, message=msg)
 
 class Mutation(graphene.ObjectType):
     """ All Mutations declared in Shopping Cart API """
