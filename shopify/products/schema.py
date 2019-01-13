@@ -1,4 +1,7 @@
+import sys
 import graphene
+from graphql import GraphQLError
+from django.db import IntegrityError
 from graphene_django import DjangoObjectType
 from .models import Product
 
@@ -57,9 +60,16 @@ class CreateProduct(graphene.Mutation):
         if price is None or price < 0:
             price = 0.00
         
-        product = Product(title=title, price=price, inventory_count=inventory_count)
-        product.save()
-        return CreateProduct(product=product)
+        try:
+            product = Product(title=title, price=price, inventory_count=inventory_count)
+            product.save()
+            return CreateProduct(product=product)
+        except IntegrityError as e:
+            sys.stderr.write(e.args[0])
+            raise GraphQLError(message=e.args[0])
+     
+        return CreateProduct(product=None)
+        
 
 class DeleteProduct(graphene.Mutation):
     """ Delete product from db by id """
