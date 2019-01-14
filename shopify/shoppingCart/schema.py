@@ -15,7 +15,7 @@ class ShoppingCartType(DjangoObjectType):
 class Query(graphene.ObjectType):
     """ All Queries declared in Shopping Cart API """
 
-    shoppingCart = graphene.Field(ShoppingCartType, id=graphene.Int())
+    shoppingCart = graphene.Field(ShoppingCartType)
     all_shopping_carts = graphene.List(ShoppingCartType)
 
     def resolve_shoppingCart(self, info, **kwargs):
@@ -30,7 +30,7 @@ class Query(graphene.ObjectType):
             return None
 
     def resolve_all_shopping_carts(self, info, **kwargs):
-        """ Query for getting all shopping carts in db """
+        """ Helper Query for getting all shopping carts in db """
 
         return ShoppingCart.objects.all()
 

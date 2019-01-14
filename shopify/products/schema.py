@@ -70,7 +70,6 @@ class CreateProduct(graphene.Mutation):
      
         return CreateProduct(product=None)
         
-
 class DeleteProduct(graphene.Mutation):
     """ Delete product from db by id """
 
