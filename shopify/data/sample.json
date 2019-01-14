@@ -1,0 +1,37 @@
+[
+    {
+        "model": "shoppingCart.ShoppingCart",
+        "pk": 1,
+        "fields": {
+            "items": [],
+            "total": 0
+        }
+    },
+    {
+        "model": "products.Product",
+        "pk": 1,
+        "fields": {
+            "title": "Deep Work: Rules for Focused Success in a Distracted World",
+            "price": 32.85,
+            "inventory_count": 3
+        }
+    },
+    {
+        "model": "products.Product",
+        "pk": 2,
+        "fields": {
+            "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+            "price": 51.47,
+            "inventory_count": 10
+        }
+    },
+    {
+        "model": "products.Product",
+        "pk": 3,
+        "fields": {
+            "title": "Essentialism: The Disciplined Pursuit of Less",
+            "price": 14.19,
+            "inventory_count": 0
+        }
+    }
+]
