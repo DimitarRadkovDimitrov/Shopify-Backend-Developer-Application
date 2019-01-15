@@ -33,7 +33,7 @@ Thanks for reading, enjoy!
 <br><br>
 
 ## Use Cases ##
-Below are some of the use cases this API supports. I've also included a [postman collection](./GraphQL_Shopping_Cart.postman_collection.json) in the root of this project with example requests.
+Below are some of the use cases this API supports. I've also included a [postman collection](./postman/GraphQL_Shopping_Cart.postman_collection.json) in the root of this project with example requests.
 <br><br>
 
 ### Query for all Products ###

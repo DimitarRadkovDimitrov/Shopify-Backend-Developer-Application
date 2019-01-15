@@ -1,12 +1,25 @@
 {
 	"info": {
-		"_postman_id": "7ccacfce-a51c-4cee-bf78-3414db343817",
+		"_postman_id": "2e7de0a1-9d2a-490b-afa3-83bcb043aca7",
 		"name": "GraphQL Shopping Cart",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Create Product 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9c5e0699-0b67-4c90-8a77-32757d6cf9b9",
+						"exec": [
+							"var json = JSON.parse(responseBody);",
+							"pm.environment.set(\"product1_id\", json.data.createProduct.product.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -34,6 +47,19 @@
 		},
 		{
 			"name": "Create Product 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2097fbcb-e7b5-451d-b963-be645a260deb",
+						"exec": [
+							"var json = JSON.parse(responseBody);",
+							"pm.environment.set(\"product2_id\", json.data.createProduct.product.id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -79,7 +105,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "mutation\n{\n\tcreateProduct(title: \"Test Product 2\", price: 12, inventoryCount: 3)\n\t{\n\t\tproduct\n\t\t{\n\t\t\tid\n\t\t\ttitle\n\t\t\tprice\n\t\t\tinventoryCount\n\t\t}\n\t}\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8000?query=query { allProducts { id, title, price, inventoryCount }}",
@@ -139,7 +165,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "mutation\n{\n\taddToCart(productId: 1)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+					"raw": "mutation\n{\n\taddToCart(productId: {{product1_id}})\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000",
@@ -166,7 +192,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "mutation\n{\n\taddToCart(productId: 2)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+					"raw": "mutation\n{\n\taddToCart(productId: {{product2_id}})\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000",
@@ -193,7 +219,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "mutation\n{\n\tremoveFromCart(productId: 1)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+					"raw": "mutation\n{\n\tremoveFromCart(productId: {{product1_id}})\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8000",
@@ -247,7 +273,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "mutation\n{\n\tsubmitCart\n\t{\n\t\tmessage\n\t}\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8000?query=query { allProducts { id, title, price, inventoryCount }}",
