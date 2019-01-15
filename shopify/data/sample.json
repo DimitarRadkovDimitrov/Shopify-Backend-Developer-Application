@@ -1,13 +1,5 @@
 [
     {
-        "model": "shoppingCart.ShoppingCart",
-        "pk": 1,
-        "fields": {
-            "items": [],
-            "total": 0
-        }
-    },
-    {
         "model": "products.Product",
         "pk": 1,
         "fields": {

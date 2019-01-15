@@ -102,6 +102,7 @@ class CreateCart(graphene.Mutation):
 
         if SESSION_CART in session:
             cartId = session.get(SESSION_CART)
+            print(cartId)
             cart = ShoppingCart.objects.get(id=cartId)
         else:
             cart = ShoppingCart(total=0)

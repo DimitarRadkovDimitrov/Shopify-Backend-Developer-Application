@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "7ccacfce-a51c-4cee-bf78-3414db343817",
+		"name": "GraphQL Shopping Cart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Product 1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/graphql",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tcreateProduct(title: \"Test Product\", price: 5.00, inventoryCount: 1)\n\t{\n\t\tproduct\n\t\t{\n\t\t\tid\n\t\t\ttitle\n\t\t\tprice\n\t\t\tinventoryCount\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Product 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tcreateProduct(title: \"Test Product 2\", price: 12, inventoryCount: 3)\n\t{\n\t\tproduct\n\t\t{\n\t\t\tid\n\t\t\ttitle\n\t\t\tprice\n\t\t\tinventoryCount\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tcreateProduct(title: \"Test Product 2\", price: 12, inventoryCount: 3)\n\t{\n\t\tproduct\n\t\t{\n\t\t\tid\n\t\t\ttitle\n\t\t\tprice\n\t\t\tinventoryCount\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000?query=query { allProducts { id, title, price, inventoryCount }}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"query": [
+						{
+							"key": "query",
+							"value": "query { allProducts { id, title, price, inventoryCount }}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Shopping Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tcreateCart\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add to Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\taddToCart(productId: 1)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add to Cart 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\taddToCart(productId: 2)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Item 1 From Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tremoveFromCart(productId: 1)\n\t{\n\t\tcart\n\t\t{\n\t\t\tid\n\t\t\titems\n\t\t\t{\n\t\t\t\tid\n\t\t\t\ttitle\n\t\t\t\tprice\n\t\t\t\tinventoryCount\n\t\t\t}\n\t\t\ttotal\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tsubmitCart\n\t{\n\t\tmessage\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete Cart Result",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/graphql"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "mutation\n{\n\tsubmitCart\n\t{\n\t\tmessage\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8000?query=query { allProducts { id, title, price, inventoryCount }}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"query": [
+						{
+							"key": "query",
+							"value": "query { allProducts { id, title, price, inventoryCount }}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
