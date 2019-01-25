@@ -1,20 +1,8 @@
-# Shopify-Backend-Developer-Application
-Shopify developer internship challenge as part of  application for Backend Developer Intern.
-
-I also wrote a short [design doc](./design.md) explaining why I made it the way I did.
+# Django GraphQL Shopping Cart API
 
 Unit tests can be found at products/tests.py and shoppingCart/tests.py. You can run all tests in the project's root with:
 
 ``` pipenv run python manage.py test -v 2 ```
-
-Thanks for reading, enjoy!
-<br><br>
-
-## Task ##
-- Create the basics for online marketplace
-- Bonus - use a shopping cart to store products for user
-- Bonus - use GraphQL to build API, write documentation, unit tests, and handle errors
-<br><br>
 
 ## How to Run ##
 <em>Note: Python 3 is required for this project</em>
